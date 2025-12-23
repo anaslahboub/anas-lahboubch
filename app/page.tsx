@@ -1,66 +1,547 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client"
+
+import type React from "react"
+
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import clsx from "clsx"
+import {
+  SiSpringboot,
+  SiDocker,
+  SiReact,
+  SiNextdotjs,
+  SiAngular,
+  SiTypescript,
+  SiPostgresql,
+  SiMongodb,
+  SiMysql,
+  SiPhp,
+  SiJavascript,
+  SiKeycloak,
+  SiRedis,
+  SiTailwindcss,
+  SiNestjs,
+  SiGraphql,
+  SiTypeorm,
+  SiSonarqube,
+  SiStripe,
+  SiTerraform,
+  SiKubernetes,
+  SiAnsible,
+  SiAwsamplify,
+} from "react-icons/si"
+import { FaJava } from "react-icons/fa"
+import { FiHome, FiGrid, FiFolder } from "react-icons/fi"
+import SkillsTab from "../components/SkillsTab"
+import ProjectsTab from "../components/ProjectsTab"
+
+type DesktopTab = "home" | "skills" | "projects"
+
+export const skills = [
+  {
+    id: "java",
+    label: "Java 17/21",
+    Icon: FaJava,
+    brandColor: "#ED8B00",
+  },
+  {
+    id: "spring-boot",
+    label: "Spring Boot 3.x",
+    Icon: SiSpringboot,
+    brandColor: "#6DB33F",
+  },
+  {
+    id: "docker",
+    label: "Docker & Compose",
+    Icon: SiDocker,
+    brandColor: "#2496ED",
+  },
+  {
+    id: "react",
+    label: "React 18",
+    Icon: SiReact,
+    brandColor: "#61DAFB",
+  },
+  {
+    id: "next",
+    label: "Next.js 14/15",
+    Icon: SiNextdotjs,
+    brandColor: "#FFFFFF",
+  },
+  {
+    id: "angular",
+    label: "Angular 20",
+    Icon: SiAngular,
+    brandColor: "#DD0031",
+  },
+  {
+    id: "ts",
+    label: "TypeScript",
+    Icon: SiTypescript,
+    brandColor: "#3178C6",
+  },
+  {
+    id: "js",
+    label: "JavaScript",
+    Icon: SiJavascript,
+    brandColor: "#F7DF1E",
+  },
+  {
+    id: "postgres",
+    label: "PostgreSQL",
+    Icon: SiPostgresql,
+    brandColor: "#4169E1",
+  },
+  {
+    id: "mysql",
+    label: "MySQL / MariaDB",
+    Icon: SiMysql,
+    brandColor: "#4479A1",
+  },
+  {
+    id: "mongo",
+    label: "MongoDB",
+    Icon: SiMongodb,
+    brandColor: "#47A248",
+  },
+  {
+    id: "php",
+    label: "PHP",
+    Icon: SiPhp,
+    brandColor: "#777BB4",
+  },
+  {
+    id: "spring-cloud",
+    label: "Spring Cloud (Config / Gateway / Eureka)",
+    Icon: SiSpringboot,
+    brandColor: "#6DB33F",
+  },
+  {
+    id: "keycloak",
+    label: "Keycloak Identity",
+    Icon: SiKeycloak,
+    brandColor: "#324152",
+  },
+  {
+    id: "redis",
+    label: "Redis Cache",
+    Icon: SiRedis,
+    brandColor: "#DC382D",
+  },
+  {
+    id: "tailwind",
+    label: "Tailwind CSS",
+    Icon: SiTailwindcss,
+    brandColor: "#06B6D4",
+  },
+  {
+    id: "nestjs",
+    label: "NestJS 10",
+    Icon: SiNestjs,
+    brandColor: "#E0234E",
+  },
+  {
+    id: "graphql",
+    label: "GraphQL Server",
+    Icon: SiGraphql,
+    brandColor: "#E10098",
+  },
+  {
+    id: "typeorm",
+    label: "TypeORM (PostgreSQL)",
+    Icon: SiTypeorm,
+    brandColor: "#FE0902",
+  },
+  {
+    id: "sonarqube",
+    label: "SonarQube (Code Quality)",
+    Icon: SiSonarqube,
+    brandColor: "#4E9BCD",
+  },
+  {
+    id: "stripe",
+    label: "Stripe Payments",
+    Icon: SiStripe,
+    brandColor: "#626CD9",
+  },
+  {
+    id: "terraform",
+    label: "Terraform",
+    Icon: SiTerraform,
+    brandColor: "#7B42F6",
+  },
+  {
+    id: "kubernetes",
+    label: "Kubernetes",
+    Icon: SiKubernetes,
+    brandColor: "#326CE5",
+  },
+  {
+    id: "ansible",
+    label: "Ansible",
+    Icon: SiAnsible,
+    brandColor: "#EE0000",
+  },
+  {
+    id: "aws",
+    label: "AWS (Cloud & DevOps)",
+    Icon: SiAwsamplify,
+    brandColor: "#FF9900",
+  },
+]
+
+export const architectureProjects = [
+  {
+    id: "chat-platform",
+    title: "Chat Microservices Application",
+    stack: "Spring Boot 3.5 · Angular 20 · PostgreSQL · Keycloak · Redis · Docker",
+    description:
+      "Application de messagerie en temps réel avec microservices (Chat, Group, Post). Inclut OAuth2/Keycloak, WebSocket, et interface Angular moderne.",
+  },
+  {
+    id: "tms",
+    title: "TMS - Transport Management System",
+    stack: "Spring Boot · React · MySQL",
+    description:
+      "Système de gestion de transport pour la planification des trajets, la gestion des chauffeurs et le suivi des flottes.",
+  },
+  {
+    id: "ecommerce-ms",
+    title: "E‑commerce Microservices",
+    stack: "NestJS · MongoDB · PostgreSQL · RabbitMQ",
+    description:
+      "Architecture microservices pour e‑commerce avec catalogue produits, commandes et paiements découplés.",
+  },
+]
+
+export const portfolioProjects = [
+  {
+    id: 1,
+    title: "Système de Gestion de Transport",
+    description:
+      "Plateforme complète pour optimiser les flottes, planifier les trajets et gérer les chauffeurs. Interface intuitive avec authentification sécurisée et API robuste.",
+    technologies: ["React.js", "Spring Boot", "MySQL", "Spring Security"],
+    image: "/dashboard.png",
+    liveUrl: "https://github.com/anaslahboub/TMS-Back-end",
+    githubUrl: "https://github.com/anaslahboub/TMS-Back-end",
+    featured: false,
+    situation: "Besoin d'une plateforme pour optimiser les flottes de transport",
+    action: "Conception et implémentation full-stack avec authentification sécurisée",
+    result: "Interface intuitive accessible desktop/mobile avec API sécurisée",
+  },
+  {
+    id: 2,
+    title: "Backend Agile App",
+    description:
+      "Application de gestion de sprints et tâches avec API sécurisée. Système complet de suivi de projet avec authentification et gestion des rôles.",
+    technologies: ["Spring Boot", "JPA", "MySQL", "JWT", "Spring Security", "Swagger"],
+    image: "/methodeAgile.jpg",
+    liveUrl: "https://github.com/anaslahboub/AgilApplication",
+    githubUrl: "https://github.com/anaslahboub/AgilApplication",
+    featured: false,
+    situation: "Gestion efficace des projets agiles et des équipes",
+    action: "Développement d'une API REST complète avec Spring Boot",
+    result: "Système de gestion performant avec authentification JWT",
+  },
+  {
+    id: 3,
+    title: "Gestion de Pharmacie",
+    description:
+      "Application web pour la gestion des stocks et ventes en pharmacie. Interface moderne avec React et backend robuste en JavaEE.",
+    technologies: ["React.js", "JavaEE", "MySQL", "Bootstrap"],
+    image: "/pharmacie.png",
+    liveUrl: "https://github.com/anaslahboub/pharmacie_project",
+    githubUrl: "https://github.com/anaslahboub/pharmacie_project",
+    featured: false,
+    situation: "Digitalisation de la gestion pharmaceutique",
+    action: "Développement d'une solution complète de gestion",
+    result: "Application web moderne pour optimiser les opérations",
+  },
+  {
+    id: 4,
+    title: "Portfolio Personnel",
+    description:
+      "Site portfolio moderne et responsive développé avec Next.js et CSS. Design épuré avec animations fluides et navigation intuitive.",
+    technologies: ["Next.js", "CSS", "TypeScript", "Vercel"],
+    image: "/portfolio.png",
+    liveUrl: "#",
+    githubUrl: "#",
+    featured: false,
+    situation: "Présentation professionnelle de mes compétences",
+    action: "Création d'un portfolio moderne avec Next.js",
+    result: "Site responsive avec animations et design moderne",
+  },
+  {
+    id: 5,
+    title: "Gestion des Stages à l'ENSA Agadir",
+    description:
+      "Plateforme digitale pour la gestion des stages des étudiants de l'ENSA Agadir. Le système permet aux étudiants de trouver des offres de stage, aux entreprises de poster des annonces, et aux administrateurs de suivre le processus de stage.",
+    technologies: ["HTML", "CSS", "JavaScript", "PHP"],
+    image: "/project-web.png",
+    liveUrl: "https://github.com/anaslahboub/mon-premier-project-web-",
+    githubUrl: "https://github.com/anaslahboub/mon-premier-project-web-",
+    featured: false,
+    situation:
+      "Manque de centralisation dans la gestion des stages à l'ENSA Agadir, avec des processus manuels et peu efficaces",
+    action:
+      "Développement d'une plateforme web complète avec trois interfaces (étudiants, entreprises, administrateurs) et mise en place d'un système de matching entre offres et demandes",
+    result:
+      "Optimisation du processus de stage avec réduction du temps de traitement des demandes de 60% et meilleure visibilité pour les entreprises",
+  },
+  {
+    id: 6,
+    title: "Gestion de Cabinet Dentaire",
+    description:
+      "Application desktop développée avec JavaFX pour la gestion complète d'un cabinet dentaire. Les fonctionnalités incluent la prise de rendez-vous, la gestion des dossiers patients, le suivi des traitements et la facturation.",
+    technologies: ["JavaFX", "Java", "MySQL", "SceneBuilder"],
+    image: "/project-java.png",
+    liveUrl: "https://github.com/anaslahboub/project-javaFX",
+    githubUrl: "https://github.com/anaslahboub/project-javaFX",
+    featured: false,
+    situation:
+      "Gestion papier des dossiers patients et des rendez-vous dans un cabinet dentaire, entraînant des erreurs et une perte de temps",
+    action:
+      "Conception et développement d'une application desktop intuitive avec JavaFX, intégrant toutes les fonctionnalités nécessaires à la gestion quotidienne d'un cabinet",
+    result:
+      "Digitalisation complète des processus avec réduction des erreurs de 75% et gain de temps estimé à 2 heures par jour pour le personnel",
+  },
+]
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  })
+}
+
+const formatTime = (date: Date) =>
+  date.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  })
+
+type ScreenState = "lock" | "login" | "desktop"
 
 export default function Home() {
+  const [screen, setScreen] = useState<ScreenState>("lock")
+  const [activeTab, setActiveTab] = useState<DesktopTab>("home")
+  const [now, setNow] = useState<Date | null>(null)
+
+  useEffect(() => {
+    // Initialise l'heure uniquement côté client pour éviter un rendu différent entre serveur et client
+    const initialNow = new Date()
+    setNow(initialNow)
+
+    const interval = setInterval(() => setNow(new Date()), 1000 * 30)
+    return () => clearInterval(interval)
+  }, [])
+
+  const dateText = useMemo(() => (now ? formatDate(now) : ""), [now])
+  const timeText = useMemo(() => (now ? formatTime(now) : ""), [now])
+
+  const unlock = useCallback(() => {
+    if (screen === "lock") {
+      setScreen("login")
+      setTimeout(() => setScreen("desktop"), 900)
+    }
+  }, [screen])
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (screen === "lock") {
+        event.preventDefault()
+        unlock()
+      }
+    }
+    window.addEventListener("keydown", handler)
+    return () => window.removeEventListener("keydown", handler)
+  }, [screen, unlock])
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="os-root">
+      <AnimatePresence initial={false}>
+        {screen === "lock" && (
+          <motion.div
+            key="lock"
+            className="lock-screen"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{
+              y: "-100%",
+              transition: { duration: 0.7, ease: [0.33, 1, 0.68, 1] },
+            }}
+            onClick={unlock}
+          >
+            <div className="lock-overlay" />
+            <div className="lock-content">
+              <div className="lock-date">{dateText}</div>
+              <div className="lock-time">{timeText}</div>
+              <div className="lock-hint">
+                <span className="lock-chevron">˄</span>
+                Click or press any key to unlock
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {screen === "login" && (
+          <motion.div
+            key="login"
+            className="login-screen"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="login-card glass-panel">
+              <div className="login-avatar">
+                <img src="/profile.png" alt="Anas Lahboub" />
+              </div>
+              <div className="login-name">Anas Lahboub</div>
+              <div className="login-caption">Software Engineering Student — ENSA Agadir</div>
+            </div>
+          </motion.div>
+        )}
+
+        {screen === "desktop" && (
+          <motion.div key="desktop" className="desktop" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <aside className="sidebar-modern glass-panel">
+              <div className="sidebar-header">
+                <div className="sidebar-avatar-modern">
+                  <img src="/profile.png" alt="Anas" />
+                </div>
+                <div className="sidebar-user-info">
+                  <div className="sidebar-user-name">Anas</div>
+                  <div className="sidebar-user-status">Available</div>
+                </div>
+              </div>
+
+              <nav className="sidebar-nav-modern">
+                <NavButton
+                  icon={<FiHome />}
+                  label="Home"
+                  active={activeTab === "home"}
+                  onClick={() => setActiveTab("home")}
+                />
+                <NavButton
+                  icon={<FiGrid />}
+                  label="Skills"
+                  active={activeTab === "skills"}
+                  onClick={() => setActiveTab("skills")}
+                />
+                <NavButton
+                  icon={<FiFolder />}
+                  label="Projects"
+                  active={activeTab === "projects"}
+                  onClick={() => setActiveTab("projects")}
+                />
+              </nav>
+            </aside>
+
+            <main className="desktop-main">
+              <section className="window glass-panel">
+                <header className="window-header">
+                  <div className="window-title">
+                    {activeTab === "home" && "Welcome"}
+                    {activeTab === "skills" && "Skills"}
+                    {activeTab === "projects" && "Projects"}
+                  </div>
+                  <div className="window-actions">
+                    <button className="dot dot-yellow" aria-label="Minimize" />
+                    <button className="dot dot-green" aria-label="Maximize" />
+                    <button className="dot dot-red" aria-label="Close" />
+                  </div>
+                </header>
+
+                <div className="window-body">
+                  {activeTab === "home" && <HomeTab />}
+                  {activeTab === "skills" && <SkillsTab skills={skills} />}
+                  {activeTab === "projects" && (
+                    <ProjectsTab architectureProjects={architectureProjects} portfolioProjects={portfolioProjects} />
+                  )}
+                </div>
+              </section>
+            </main>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+type NavButtonProps = {
+  icon: React.ReactNode
+  label: string
+  active?: boolean
+  onClick?: () => void
+}
+
+function NavButton({ icon, label, active, onClick }: NavButtonProps) {
+  return (
+    <button onClick={onClick} className={clsx("nav-button", active && "nav-button-active")}>
+      <span className="nav-button-icon">{icon}</span>
+      <span className="nav-button-label">{label}</span>
+      {active && <motion.div className="nav-button-indicator" layoutId="active-tab" />}
+    </button>
+  )
+}
+
+function HomeTab() {
+  return (
+    <div className="tab-home-container">
+      <div className="home-hero-section">
+        <div className="home-hero-left">
+          <p className="home-greeting">Hello, I&apos;m</p>
+          <h1 className="home-hero-title">
+            Anas Lahboub,{" "}
+            <span className="home-highlight">Java/Spring Architect &amp; Full Stack Engineer</span>
+          </h1>
+          <p className="home-hero-subtitle">Software Engineering student at ENSA Agadir</p>
+          <p className="home-hero-description">
+            5th year Software Engineering student at ENSA Agadir, currently looking for a PFE internship starting
+            February 2025. I design scalable backends in Java/Spring and craft modern web experiences with React and
+            Next.js.
+          </p>
+          <div className="home-hero-cta">
+            <button className="btn-primary">View Projects</button>
+            <button className="btn-secondary">Download CV</button>
+          </div>
+        </div>
+        <div className="home-hero-right">
+          <div className="home-profile-card-large glass-panel">
+            <div className="home-profile-avatar-large">
+              <img src="/profile.png" alt="Anas Lahboub" />
+            </div>
+            <div className="home-profile-details">
+              <h2 className="home-profile-name">Anas Lahboub</h2>
+              <p className="home-profile-role">Java/Spring Architect &amp; Full Stack Engineer</p>
+              <p className="home-profile-school">5th year Software Engineering — ENSA Agadir</p>
+              <div className="home-profile-location">
+                <span>📍</span>
+                <span>Taroudant, Morocco</span>
+              </div>
+              <a className="home-profile-email" href="mailto:anas.lahboub@edu.uiz.ac.ma">
+                anas.lahboub@edu.uiz.ac.ma
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="home-about-section">
+        <h2 className="home-section-title">About Me</h2>
+        <div className="home-about-content">
+          <p className="home-about-paragraph">
+            I am a Software Engineering student in my 5th year at ENSA Agadir with a strong focus on backend
+            architectures and modern web applications. I enjoy designing clean domain models, robust APIs, and intuitive
+            user interfaces.
+          </p>
+          <p className="home-about-paragraph">
+            I am particularly interested in internships where I can work on large-scale systems, microservices, and
+            secure authentication flows using technologies like Spring Boot, Keycloak, and modern frontend frameworks.
           </p>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
     </div>
-  );
+  )
 }
