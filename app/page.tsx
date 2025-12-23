@@ -504,7 +504,9 @@ function HomeTab() {
           </p>
           <div className="home-hero-cta">
             <button className="btn-primary">View Projects</button>
-            <button className="btn-secondary">Download CV</button>
+            <a className="btn-secondary" href="/cv.pdf" download>
+              Download CV
+            </a>
           </div>
         </div>
         <div className="home-hero-right">
