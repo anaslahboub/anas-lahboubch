@@ -513,8 +513,8 @@ export default function Home() {
                   {activeTab === "projects" && (
                     <ProjectsTab architectureProjects={architectureProjects} portfolioProjects={portfolioProjects} />
                   )}
-                  {activeTab === "certifications" && <CertificationsTab certifications={certifications} />}
-                  {activeTab === "education" && <EducationTab education={education} />}
+                  {activeTab === "certifications" && <CertificationsTab />}
+                  {activeTab === "education" && <EducationTab />}
                 </div>
               </section>
             </main>
