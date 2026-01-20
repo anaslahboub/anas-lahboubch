@@ -9,7 +9,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Anas Lahboub - Portfolio",
-  description: "Java/Spring Architect & Full Stack Engineer - Software Engineering Student at ENSA Agadir",
+  description: "Java/Spring Developer & Full Stack Engineer - Software Engineering Student at ENSA Agadir",
   generator: "v0.app",
   icons: {
     icon: [

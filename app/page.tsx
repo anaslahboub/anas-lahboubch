@@ -32,10 +32,11 @@ import {
 } from "react-icons/si"
 import { FaJava } from "react-icons/fa"
 import { FiHome, FiGrid, FiFolder } from "react-icons/fi"
+import { MdSchool, MdEmojiEvents } from "react-icons/md"
 import SkillsTab from "../components/SkillsTab"
 import ProjectsTab from "../components/ProjectsTab"
 
-type DesktopTab = "home" | "skills" | "projects"
+type DesktopTab = "home" | "skills" | "projects" | "certifications" | "education"
 
 export const skills = [
   {
@@ -214,23 +215,61 @@ export const architectureProjects = [
   },
 ]
 
-export const portfolioProjects = [
+export const certifications = [
   {
-    id: 1,
-    title: "Système de Gestion de Transport",
-    description:
-      "Plateforme complète pour optimiser les flottes, planifier les trajets et gérer les chauffeurs. Interface intuitive avec authentification sécurisée et API robuste.",
-    technologies: ["React.js", "Spring Boot", "MySQL", "Spring Security"],
-    image: "/dashboard.png",
-    liveUrl: "https://github.com/anaslahboub/TMS-Back-end",
-    githubUrl: "https://github.com/anaslahboub/TMS-Back-end",
-    featured: false,
-    situation: "Besoin d'une plateforme pour optimiser les flottes de transport",
-    action: "Conception et implémentation full-stack avec authentification sécurisée",
-    result: "Interface intuitive accessible desktop/mobile avec API sécurisée",
+    title: "Oracle Certified Associate Java Programmer",
+    issuer: "Oracle University",
+    date: "July 2025",
+    skills: ["Java SE 8", "OOP", "JVM"],
+    icon: MdEmojiEvents,
+    color: "#EF4444",
+    image: "/certification1.png",
   },
   {
+    title: "Oracle Certified Associate Java Programmer SE 17",
+    issuer: "Oracle University",
+    date: "January 2026",
+    skills: ["Java SE 17", "OOP", "Functional Programming", "Modules"],
+    icon: MdEmojiEvents,
+    color: "#1E40AF",
+    image: "/certification1.png",
+  },
+]
+
+export const education = [
+  {
+    degree: "Diplôme d'Ingénieur Logiciel",
+    school: "ENSA Agadir (École Nationale Supérieure d'Arts et Métiers)",
+    period: "2021 - 2026",
+    description: "Programme d'ingénierie informatique complet couvrant les architectures logicielles, les systèmes distribués, et les technologies cloud.",
+    icon: MdSchool,
+    color: "#3B82F6",
+    status: "En cours (5ème année)",
+    image: "/ensa.png",
+  },
+]
+
+export const portfolioProjects = [
+  
+  {
     id: 2,
+    title: "Spectateur Spring Batch - Système de Gestion des Entrées",
+    description:
+      "Application Spring Batch robuste pour le traitement par lots des entrées de spectateurs dans un stade. Lit des données XML/JSON, valide, transforme et calcule automatiquement des statistiques détaillées sur la fréquentation. Implémente plusieurs design patterns (Strategy, Composite, Factory, Observer).",
+    technologies: ["Spring Boot 3", "Spring Batch 5", "JPA", "Hibernate", "JAXB", "Jackson", "H2/PostgreSQL", "Docker", "Lombok"],
+    image: "/project-batch.png",
+    liveUrl: "https://github.com/anaslahboub/spectateur-spring-batch",
+    githubUrl: "https://github.com/anaslahboub/spectateur-spring-batch",
+    featured: false,
+    situation:
+      "Besoin de traiter de gros volumes de données d'entrées de spectateurs provenant de multiples sources (XML, JSON) avec validation métier et génération de statistiques analytiques",
+    action:
+      "Développement d'une solution Spring Batch avec architecture multi-couches, implémentation de design patterns (Strategy pour validation, Composite pour règles métier, Factory pour création d'objets), et calcul automatique de statistiques",
+    result:
+      "Traitement automatisé toutes les 10 minutes avec gestion des erreurs, génération de 125+ statistiques (distribution par nationalité, types de tickets, affluence par tribune), et respect des principes SOLID",
+  },
+  {
+    id: 3,
     title: "Backend Agile App",
     description:
       "Application de gestion de sprints et tâches avec API sécurisée. Système complet de suivi de projet avec authentification et gestion des rôles.",
@@ -244,7 +283,7 @@ export const portfolioProjects = [
     result: "Système de gestion performant avec authentification JWT",
   },
   {
-    id: 3,
+    id: 4,
     title: "Gestion de Pharmacie",
     description:
       "Application web pour la gestion des stocks et ventes en pharmacie. Interface moderne avec React et backend robuste en JavaEE.",
@@ -258,7 +297,7 @@ export const portfolioProjects = [
     result: "Application web moderne pour optimiser les opérations",
   },
   {
-    id: 4,
+    id: 5,
     title: "Portfolio Personnel",
     description:
       "Site portfolio moderne et responsive développé avec Next.js et CSS. Design épuré avec animations fluides et navigation intuitive.",
@@ -272,7 +311,7 @@ export const portfolioProjects = [
     result: "Site responsive avec animations et design moderne",
   },
   {
-    id: 5,
+    id: 6,
     title: "Gestion des Stages à l'ENSA Agadir",
     description:
       "Plateforme digitale pour la gestion des stages des étudiants de l'ENSA Agadir. Le système permet aux étudiants de trouver des offres de stage, aux entreprises de poster des annonces, et aux administrateurs de suivre le processus de stage.",
@@ -289,7 +328,7 @@ export const portfolioProjects = [
       "Optimisation du processus de stage avec réduction du temps de traitement des demandes de 60% et meilleure visibilité pour les entreprises",
   },
   {
-    id: 6,
+    id: 7,
     title: "Gestion de Cabinet Dentaire",
     description:
       "Application desktop développée avec JavaFX pour la gestion complète d'un cabinet dentaire. Les fonctionnalités incluent la prise de rendez-vous, la gestion des dossiers patients, le suivi des traitements et la facturation.",
@@ -305,6 +344,7 @@ export const portfolioProjects = [
     result:
       "Digitalisation complète des processus avec réduction des erreurs de 75% et gain de temps estimé à 2 heures par jour pour le personnel",
   },
+  
 ]
 
 const formatDate = (date: Date) => {
@@ -435,6 +475,18 @@ export default function Home() {
                   active={activeTab === "projects"}
                   onClick={() => setActiveTab("projects")}
                 />
+                <NavButton
+                  icon={<MdEmojiEvents />}
+                  label="Certifications"
+                  active={activeTab === "certifications"}
+                  onClick={() => setActiveTab("certifications")}
+                />
+                <NavButton
+                  icon={<MdSchool />}
+                  label="Education"
+                  active={activeTab === "education"}
+                  onClick={() => setActiveTab("education")}
+                />
               </nav>
             </aside>
 
@@ -445,6 +497,8 @@ export default function Home() {
                     {activeTab === "home" && "Welcome"}
                     {activeTab === "skills" && "Skills"}
                     {activeTab === "projects" && "Projects"}
+                    {activeTab === "certifications" && "Certifications"}
+                    {activeTab === "education" && "Education"}
                   </div>
                   <div className="window-actions">
                     <button className="dot dot-yellow" aria-label="Minimize" />
@@ -459,6 +513,8 @@ export default function Home() {
                   {activeTab === "projects" && (
                     <ProjectsTab architectureProjects={architectureProjects} portfolioProjects={portfolioProjects} />
                   )}
+                  {activeTab === "certifications" && <CertificationsTab certifications={certifications} />}
+                  {activeTab === "education" && <EducationTab education={education} />}
                 </div>
               </section>
             </main>
@@ -494,7 +550,7 @@ function HomeTab() {
           <p className="home-greeting">Hello, I&apos;m</p>
           <h1 className="home-hero-title">
             Anas Lahboub,{" "}
-            <span className="home-highlight">Java/Spring Architect &amp; Full Stack Engineer</span>
+            <span className="home-highlight">Java/Spring  &amp; Full Stack Engineer</span>
           </h1>
           <p className="home-hero-subtitle">Software Engineering student at ENSA Agadir</p>
           <p className="home-hero-description">
@@ -516,7 +572,7 @@ function HomeTab() {
             </div>
             <div className="home-profile-details">
               <h2 className="home-profile-name">Anas Lahboub</h2>
-              <p className="home-profile-role">Java/Spring Architect &amp; Full Stack Engineer</p>
+              <p className="home-profile-role">Java/Spring Developer &amp; Full Stack Engineer</p>
               <p className="home-profile-school">5th year Software Engineering — ENSA Agadir</p>
               <div className="home-profile-location">
                 <span>📍</span>
@@ -543,6 +599,79 @@ function HomeTab() {
             secure authentication flows using technologies like Spring Boot, Keycloak, and modern frontend frameworks.
           </p>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function CertificationsTab() {
+  return (
+    <div className="tab-certifications-container">
+      <h2 className="tab-section-title">Certifications</h2>
+      <div className="certifications-grid">
+        {certifications.map((cert, index) => {
+          const IconComponent = cert.icon
+          return (
+            <div key={index} className="certification-card glass-panel">
+              <div className="certification-header">
+                <div className="certification-icon" style={{ backgroundColor: cert.color }}>
+                  <IconComponent size={32} color="white" />
+                </div>
+                <div className="certification-meta">
+                  <h3 className="certification-title">{cert.title}</h3>
+                  <p className="certification-issuer">{cert.issuer}</p>
+                </div>
+              </div>
+              {cert.image && (
+                <div className="certification-image">
+                  <img src={cert.image} alt={cert.title} />
+                </div>
+              )}
+              <div className="certification-content">
+                <p className="certification-date">{cert.date}</p>
+                <div className="certification-skills">
+                  {cert.skills.map((skill, idx) => (
+                    <span key={idx} className="skill-badge">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function EducationTab() {
+  return (
+    <div className="tab-education-container">
+      <h2 className="tab-section-title">Education</h2>
+      <div className="education-timeline">
+        {education.map((edu, index) => {
+          const IconComponent = edu.icon
+          return (
+            <div key={index} className="education-card glass-panel">
+              <div className="education-icon" style={{ backgroundColor: edu.color }}>
+                <IconComponent size={32} color="white" />
+              </div>
+              <div className="education-content">
+                <h3 className="education-degree">{edu.degree}</h3>
+                <p className="education-school">{edu.school}</p>
+                <p className="education-period">{edu.period}</p>
+                <p className="education-status">{edu.status}</p>
+                <p className="education-description">{edu.description}</p>
+              </div>
+              {edu.image && (
+                <div className="education-image">
+                  <img src={edu.image} alt={edu.school} />
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

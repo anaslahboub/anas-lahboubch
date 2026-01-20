@@ -26,6 +26,8 @@ export default function ProjectsTab({ architectureProjects, portfolioProjects }:
       stack: p.stack,
       description: p.description,
       type: "architecture" as const,
+      liveUrl: undefined,
+      githubUrl: undefined,
     })),
     ...portfolioProjects.map((p) => ({
       id: p.id,
@@ -33,6 +35,8 @@ export default function ProjectsTab({ architectureProjects, portfolioProjects }:
       stack: p.technologies.join(" · "),
       description: p.description,
       type: "portfolio" as const,
+      liveUrl: p.liveUrl,
+      githubUrl: p.githubUrl,
     })),
   ]
 
@@ -96,11 +100,24 @@ export default function ProjectsTab({ architectureProjects, portfolioProjects }:
 
               <p className={styles.showcaseDescription}>{project.description}</p>
 
-              <button className={styles.showcaseOpenBtn}>
-                <span>View Project</span>
-                <FiExternalLink className={styles.btnIcon} />
-                <div className={styles.btnGlow} />
-              </button>
+              {project.githubUrl && project.githubUrl !== "#" ? (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.showcaseOpenBtn}
+                >
+                  <span>View Project</span>
+                  <FiExternalLink className={styles.btnIcon} />
+                  <div className={styles.btnGlow} />
+                </a>
+              ) : (
+                <button className={styles.showcaseOpenBtn} disabled>
+                  <span>View Project</span>
+                  <FiExternalLink className={styles.btnIcon} />
+                  <div className={styles.btnGlow} />
+                </button>
+              )}
             </div>
           </div>
         ))}
